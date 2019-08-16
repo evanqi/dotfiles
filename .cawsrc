@@ -1,0 +1,4 @@
+export DOORMAN_USERNAME=evanqi
+export EC2_ACCOUNT_ID=611855325840
+export CAWS_DIRECTORY=/Users/evanqi/caviar/projects/caws
+export EC2_ROLE=engineer
