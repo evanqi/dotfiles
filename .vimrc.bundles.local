@@ -1,0 +1,6 @@
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'terryma/vim-expand-region'
+Plugin 'FooSoft/vim-argwrap'
+Plugin 'alvan/vim-closetag'
+Plugin 'arcticicestudio/nord-vim'
