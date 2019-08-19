@@ -1,0 +1,48 @@
+filetype indent on
+set nowrap
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set smartindent
+set autoindent
+
+set number
+let mapleader = ','
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.config/nvim/bundle/Vundle.vim
+call vundle#begin("~/.config/nvim/bundle")
+
+inoremap jj <Esc>
+nnoremap <silent> <leader>a :ArgWrap<CR>
+
+let g:ctrlp_max_files=0
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+let g:ale_fixers= {
+\     'ruby': ['rubocop'],
+\     'javascript': ['eslint']
+\}
+let g:ale_fix_on_save = 1
+
+Plugin 'w0rp/ale'
+Plugin 'kien/ctrlp.vim'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'bling/vim-airline'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-rails'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'mileszs/ack.vim'
+Plugin 'tpope/vim-endwise'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'tpope/vim-fugitive'
+Plugin 'floobits/floobits-neovim'
+Plugin 'rking/ag.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'FooSoft/vim-argwrap'
+Plugin 'ruby-formatter/rufo-vim'
+Plugin 'dkprice/vim-easygrep'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
