@@ -1,0 +1,205 @@
+# Convenient stuff
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+alias l="ls -Gal"
+alias ls="ls -G"
+alias ll="ls -Ghal"
+alias empties="find . -empty -type d -maxdepth 2"
+tableflip() {
+  echo "（╯°□°）╯ ┻━┻";
+}
+
+alias pg="ps ax | grep -v grep | grep -i "
+alias ip="ifconfig | grep 'inet '"
+
+function profile {
+  $EDITOR ~/.bash_profile && source ~/.bash_profile
+}
+function aliases {
+  $EDITOR ~/.aliases && source ~/.aliases
+}
+
+alias df='df -h'
+alias ducks='du -cksh * | sort -rn|head -11' # Lists folders and files sizes in the current folder
+alias f='find . -iname'
+alias gr='grep -r' # Recursive grep
+alias m='less'
+alias systail='tail -f /var/log/system.log'
+alias top='top -o cpu'
+# Shows most used commands, from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
+alias profileme="history | awk '{print \$4}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
+
+# Rails
+alias sc="bundle exec rails c $@"
+alias sd="bundle exec rails db $@"
+alias ss="bundle exec rails s $@"
+
+alias rmp="bundle exec rake db:migrate db:test:prepare"
+alias migrate="bundle exec rake db:migrate"
+alias reset_db="bundle exec rake db:migrate:reset"
+
+function rlog {
+  if [ -z "$1" ]; then
+    tail -f -n80 ./log/development.log
+  else
+    tail -f -n80 ./log/$1.log
+  fi
+}
+
+# Git
+alias ch="git diff --ignore-space-at-eol | $EDITOR"
+alias chc="git diff --cached --ignore-space-at-eol | $EDITOR"
+alias current_branch="git symbolic-ref HEAD | cut -d / -f 3"
+alias gaa="git add --all && git status"
+alias gadd="git add --all && git status"
+alias gap="git add --patch"
+alias gb='git branch -v'
+alias gbr="git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname)' | cut -d / -f 3-"
+alias gca='git commit -v --all'
+alias gcam='git commit --amend'
+alias gcb='git checkout -b'
+alias gcf="git checkout -f"
+alias gch="git log ORIG_HEAD.. --stat --no-merges"
+alias gci='git commit -v'
+alias gcia='git commit -v --all'
+alias gclean="git clean -dff && git submodule foreach git clean -dff"
+alias gcp="git checkout --patch"
+alias gcv='git commit -v'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gdh='git diff HEAD'
+alias gdm='git diff origin/master'
+alias gfd='git push -f origin head:canary'
+alias git-user="$EDITOR ~/.gitconfig"
+alias gl="git log --date=local"
+alias gmm="git merge master"
+alias gps="git pull && git submodule sync && git submodule update --init --recursive"
+alias grc="git rebase --continue"
+alias grim="git rebase --interactive master"
+alias grm="git status | grep 'deleted:' | sed -e 's/^.*deleted: *//' -e 's/^/\"/g' -e 's/$/\"/g' | xargs -n1 git rm"
+alias gs='git status'
+alias gss='git status --short --branch'
+alias gu="$EDITOR ~/.gitconfig"
+alias gum="echo 'Resetting master to the latest origin/master...' && git fetch && git update-ref refs/heads/master origin/master"
+alias grum="gum && git rebase master"
+alias ungreen="git log --abbrev-commit --reverse --pretty=format:'%C(yellow)%h%Creset %C(bold)%s%Creset %an' origin/ci-master-distributed-latest..origin/master"
+
+if type complete >/dev/null 2>&1; then
+  __git_complete gco _git_checkout
+  __git_complete gl _git_log
+  __git_complete gb _git_branch
+fi
+
+# Xavier's aliases
+alias gis="git status"
+alias goc="git checkout"
+alias gic="git commit -m"
+alias gia="git add"
+alias gid="git diff --cached"
+alias v="vim"
+
+# OS-X Specific
+alias lockscreen='/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'
+
+function gco {
+  if [[ $# == 0 ]]; then
+    git checkout master
+  else
+    git checkout "$@"
+  fi
+}
+
+ssh() {
+  (cd ~/Development/config_files/ssh && make >/dev/null 2>&1)
+  command ssh "$@"
+}
+
+# Easy access to web resources
+alias sqweb-staging-console="sqssh web sjc1 'bash -login -c \"echo Staging Console; cd current; bundle exec rails c\"'"
+alias sqweb-staging-db="sqssh web sjc1 'bash -login -c \"echo Staging Database; cd current; bundle exec rails db\"'"
+alias sqweb-prod-console="sqssh web sjc2b 'bash -login -c \"echo Production Console; cd current; bundle exec rails c\"'"
+alias sqweb-prod-db="sqssh web sjc2b 'bash -login -c \"echo Production Database; cd current; bundle exec rails db\"'"
+
+# java source nav
+alias cdj='cd $(pwd'" | sed 's/\(.*\/java\/\).*/\1/')" # up to java
+
+alias java8='export JAVA_HOME="`/usr/libexec/java_home -v 1.8`" && echo $JAVA_HOME'
+alias java9='export JAVA_HOME="`/usr/libexec/java_home -v 9`" && echo $JAVA_HOME'
+alias java10='export JAVA_HOME="`/usr/libexec/java_home -v 10`" && echo $JAVA_HOME'
+alias java11='export JAVA_HOME="`/usr/libexec/java_home -v 11`" && echo $JAVA_HOME'
+
+# Xcode
+function dxdd {
+  if pgrep Xcode >/dev/null; then
+    echo "Cannot delete derived data while Xcode is running!"
+  else
+    echo "Deleting `cd ~/Library/Developer/Xcode; pwd`/DerivedData"
+    rm -rf ~/Library/Developer/Xcode/DerivedData
+  fi
+}
+
+if [ -n "${BASH_SOURCE[0]}" ]; then
+  for file in ${BASH_SOURCE[0]}.d/*; do
+    source $file
+  done
+else
+  for file in ${0}.d/*; do
+    source $file
+  done
+fi
+
+# If Xcode keeps messing up your ssh agent use this to restart the agent and fix it
+alias kick-ssh-agent='killall ssh-agent; eval "$(ssh-agent -s)" && ssh-add -K'
+
+# Replace the ssh hostkey in your known_hosts file
+function rekey() {
+  hostname=$1
+  if [ -z $hostname ]; then
+    echo "Usage: rekey <hostname>"
+    return
+  fi
+  ssh-keygen -R $hostname
+  ssh-keyscan $hostname >> ~/.ssh/known_hosts
+}
+
+## Aliases for interviewers
+
+# `smartcp *.java` to pbcopy for SmartRecruiter
+smartcp() {
+  for f in "$@"; do
+    echo $f;
+    echo "\`\`\`";
+    cat $f;
+    echo "\`\`\`";
+  done | pbcopy
+}
+
+# log sweeper
+
+function get-free-disk-space() {
+  df -k / | tail -n 1 | awk '{ print $4 }'
+}
+
+function as-gb() {
+  read num
+  echo $(echo "scale=2;$num/1048576" | bc)Gi
+}
+
+# run this function to reclaim disk space
+function clean-logs() {
+  before=$(get-free-disk-space)
+  set -x
+  /bin/rm -f ~/Development/web/log/*.log
+  /bin/rm -f ~/Development/log/development/*
+  /bin/rm -f ~/Development/log/*
+  /bin/rm -f ~/Development/jumbotron/log/*
+  /bin/rm -f /usr/local/var/log/nginx/*.log
+  set +x
+  after=$(get-free-disk-space)
+  diff=$(echo $(expr $before - $after) | as-gb)
+  echo "Cleaned up $diff"
+}
+
+# vim: filetype=sh
